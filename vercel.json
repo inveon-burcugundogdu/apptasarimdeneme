@@ -1,5 +1,4 @@
 {
-  // Vercel yapılandırma dosyası
   "version": 2,
   "builds": [
     {
