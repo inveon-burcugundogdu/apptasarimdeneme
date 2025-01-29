@@ -12,17 +12,67 @@
             box-sizing: border-box;
         }
 
+        /* Splash Screen */
+        .splash-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/public/login-bg.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            border-radius: 38px;
+            overflow: hidden;
+        }
+
+        .splash-logo {
+            width: 180px;
+            height: auto;
+            filter: brightness(0) invert(1);
+            opacity: 0;
+            transform: scale(0.8) translateY(50px);
+            animation: logoAnimation 1.5s ease forwards;
+            margin-top: 180px;
+        }
+
+        @keyframes logoAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
             background-color: #f0f0f0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
         }
 
         .device-container {
-            padding: 20px;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: scale(0.67);
+            transform-origin: center;
         }
 
         .iphone {
@@ -34,6 +84,7 @@
             overflow: hidden;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
             border: 12px solid #1a1a1a;
+            transform: scale(1);
         }
 
         .status-bar {
@@ -316,76 +367,81 @@
             width: 100%;
             height: 100%;
             background: #000;
-            z-index: 2500;
-            display: none;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            display: flex;
             flex-direction: column;
         }
 
         .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-container {
+            padding: 20px;
+            flex: 1;
             display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .search-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 60px 20px 20px;
+            justify-content: flex-end;
+            padding: 30px 0;
         }
 
-        .search-header h2 {
+        .close-search {
             color: #fff;
-            font-weight: 300;
             font-size: 24px;
+            cursor: pointer;
+        }
+
+        .search-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .voice-search {
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
         }
 
         .search-suggestions {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            padding: 20px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .search-suggestions::-webkit-scrollbar {
-            display: none;
+            padding: 20px 0;
         }
 
         .suggestion {
+            color: #fff;
             padding: 8px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            color: #fff;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-
-        .search-input-container {
-            position: relative;
-            padding: 0 20px;
-            margin-top: 20px;
-        }
-
-        .search-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding: 15px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-        }
-
-        .search-input-wrapper .mic-icon {
-            position: absolute;
-            right: 15px;
-            color: #fff;
-            font-size: 20px;
-        }
-
-        .search-text {
-            color: #fff;
-            font-size: 16px;
-            margin-left: 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
         }
 
         .related-products {
@@ -426,10 +482,23 @@
             background: transparent;
         }
 
-        .back-button {
-            color: #fff;
+        .back-button, .detail-back {
             font-size: 24px;
             cursor: pointer;
+            padding: 10px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+
+        .back-button svg, .detail-back svg {
+            width: 32px;
+            height: 32px;
+            stroke: currentColor;
+            stroke-width: 1.5;
         }
 
         .filter-options {
@@ -770,10 +839,10 @@
         }
 
         .detail-back, .detail-favorite {
-            color: #fff;
+            color: #000;
             font-size: 24px;
             cursor: pointer;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            text-shadow: none;
         }
 
         .detail-image-container {
@@ -904,6 +973,464 @@
             text-align: center;
             cursor: pointer;
         }
+
+        /* Login Page */
+        .login-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/public/login-bg.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            border-radius: 38px;
+            overflow: hidden;
+            visibility: hidden;
+        }
+
+        .login-page.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-logo {
+            width: 180px;
+            height: auto;
+            margin-top: 180px;
+            margin-bottom: 40px;
+            filter: brightness(0) invert(1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .login-text {
+            color: #fff;
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.4;
+            margin-bottom: 40px;
+            font-weight: 300;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            transition-delay: 0.1s;
+        }
+
+        .login-buttons {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 60px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            transition-delay: 0.2s;
+        }
+
+        .login-page.active .login-logo,
+        .login-page.active .login-text,
+        .login-page.active .login-buttons {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-primary {
+            background: #fff;
+            color: #000;
+            border: none;
+        }
+
+        .login-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+
+        .login-guest {
+            color: #fff;
+            text-decoration: underline;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .login-form {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border-radius: 38px;
+            overflow: hidden;
+            transform: translateX(100%);
+        }
+
+        .login-form.active {
+            display: flex;
+            transform: translateX(-100%);
+        }
+
+        .login-form-header {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .back-to-login {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+        }
+
+        .back-to-login svg {
+            width: 32px;
+            height: 32px;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .login-form-logo {
+            width: 120px;
+            margin: 0 auto;
+        }
+
+        .login-form-title {
+            font-size: 28px;
+            margin: 30px 0 20px;
+            font-weight: 400;
+        }
+
+        .login-form-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 10px 0;
+        }
+
+        .login-form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .error-message {
+            color: #ff3b30;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            position: absolute;
+            bottom: -20px;
+        }
+
+        .login-form-input.error {
+            border-color: #ff3b30;
+        }
+
+        .login-form-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .required-field {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .login-form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .login-form-input:focus {
+            border-color: #000;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: #000;
+            text-decoration: underline;
+            font-size: 14px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .login-form-button {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0 30px;
+        }
+
+        .signup-redirect {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .signup-link {
+            color: #000;
+            text-decoration: underline;
+            margin-left: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .signup-form {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            padding: 0 20px;
+            transition: all 0.3s ease;
+            border-radius: 38px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            transform: translateX(100%);
+        }
+
+        .signup-form.active {
+            display: flex;
+            transform: translateX(-100%);
+        }
+
+        .signup-form-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 1000;
+            padding: 20px 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .signup-form-logo {
+            width: 120px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .signup-form-title {
+            font-size: 28px;
+            margin: 30px 0 20px;
+            font-weight: 400;
+            background: #fff;
+            padding: 10px 0;
+        }
+
+        .signup-form-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 10px 0;
+        }
+
+        .signup-form-button {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0 30px;
+        }
+
+        .terms-text {
+            margin-bottom: 40px;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .signup-form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .signup-form-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .signup-form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .signup-form-input:focus {
+            border-color: #000;
+        }
+
+        .signup-form-button {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0 30px;
+        }
+
+        .terms-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .terms-link {
+            color: #000;
+            text-decoration: underline;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .gender-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .gender-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .gender-option span {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .consent-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .consent-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .consent-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .consent-option span {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        input[type="date"] {
+            font-family: inherit;
+            color: #333;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+        }
+
+        input[type="tel"] {
+            font-family: inherit;
+        }
     </style>
 </head>
 <body>
@@ -917,19 +1444,156 @@
                     <span class="battery">🔋</span>
                 </div>
             </div>
-
             <div class="app-content" id="appContent">
-                <div class="hero-section">
+                <div class="splash-screen">
+                    <img src="/public/ltb-logo.png" alt="LTB Logo" class="splash-logo">
+                </div>
+                <div class="login-page">
+                    <img src="/public/ltb-logo.png" alt="LTB Logo" class="login-logo">
+                    <div class="login-text">LTB Jeans hesabınıza giriş yaparak<br>size özel içeriklere erişin.</div>
+                    <div class="login-buttons">
+                        <div class="login-button login-primary" id="loginButton">Giriş yap</div>
+                        <div class="login-button login-secondary">Üye ol</div>
+                        <div class="login-guest">Misafir olarak devam et</div>
+                    </div>
+                </div>
+                <div class="login-form">
+                    <div class="login-form-header">
+                        <div class="back-to-login">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M16 4L8 12L16 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <img src="/public/ltb-logo.png" alt="LTB Logo" class="login-form-logo">
+                    </div>
+                    <div class="login-form-title">Tekrar Hoş Geldiniz</div>
+                    <div class="login-form-subtitle">E-posta adresiniz ve şifreniz ile giriş yapın.</div>
+                    <div class="login-form-group">
+                        <div class="login-form-label">
+                            <span>E-posta*</span>
+                            <span class="required-field">Zorunlu alan*</span>
+                        </div>
+                        <input type="email" class="login-form-input" id="emailInput" placeholder="E-posta adresinizi girin">
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="login-form-group">
+                        <div class="login-form-label">
+                            <span>Şifre*</span>
+                        </div>
+                        <div class="password-input-container">
+                            <input type="password" class="login-form-input" id="passwordInput" placeholder="Şifrenizi girin">
+                            <div class="toggle-password">👁️</div>
+                        </div>
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="forgot-password">Şifrenizi mi unuttunuz?</div>
+                    <button class="login-form-button">GİRİŞ YAP</button>
+                    <div class="signup-redirect">
+                        <span>Hesabınız yok mu?</span>
+                        <span class="signup-link">Üye Olun</span>
+                    </div>
+                </div>
+                <div class="signup-form">
+                    <div class="signup-form-header">
+                        <div class="back-to-login">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M16 4L8 12L16 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <img src="/public/ltb-logo.png" alt="LTB Logo" class="signup-form-logo">
+                    </div>
+                    <div class="signup-form-title">Üye Ol</div>
+                    <div class="signup-form-subtitle">Hesap oluşturarak size özel fırsatlardan yararlanın.</div>
+                    <div class="signup-form-group">
+                        <div class="signup-form-label">
+                            <span>Ad Soyad*</span>
+                            <span class="required-field">Zorunlu alan*</span>
+                        </div>
+                        <input type="text" class="signup-form-input" id="nameInput" placeholder="Adınız ve soyadınız">
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="signup-form-group">
+                        <div class="signup-form-label">
+                            <span>E-posta*</span>
+                        </div>
+                        <input type="email" class="signup-form-input" id="signupEmailInput" placeholder="E-posta adresinizi girin">
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="signup-form-group">
+                        <div class="signup-form-label">
+                            <span>Telefon Numarası*</span>
+                        </div>
+                        <input type="tel" class="signup-form-input" id="phoneInput" placeholder="5XX XXX XX XX">
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="signup-form-group">
+                        <div class="signup-form-label">
+                            <span>Cinsiyet*</span>
+                        </div>
+                        <div class="gender-options">
+                            <label class="gender-option">
+                                <input type="radio" name="gender" value="female">
+                                <span>Kadın</span>
+                            </label>
+                            <label class="gender-option">
+                                <input type="radio" name="gender" value="male">
+                                <span>Erkek</span>
+                            </label>
+                            <label class="gender-option">
+                                <input type="radio" name="gender" value="other">
+                                <span>Diğer</span>
+                            </label>
+                        </div>
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="signup-form-group">
+                        <div class="signup-form-label">
+                            <span>Doğum Tarihi*</span>
+                        </div>
+                        <input type="date" class="signup-form-input" id="birthdateInput">
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="signup-form-group">
+                        <div class="signup-form-label">
+                            <span>Şifre*</span>
+                        </div>
+                        <div class="password-input-container">
+                            <input type="password" class="signup-form-input" id="signupPasswordInput" placeholder="Şifrenizi girin">
+                            <div class="toggle-password">👁️</div>
+                        </div>
+                        <div class="error-message">Bu alan zorunludur</div>
+                    </div>
+                    <div class="consent-options">
+                        <label class="consent-option">
+                            <input type="checkbox" id="emailConsent">
+                            <span>E-mail ile kampanya ve ürünler hakkında haberdar olmak istiyorum.</span>
+                        </label>
+                        <label class="consent-option">
+                            <input type="checkbox" id="smsConsent">
+                            <span>SMS ile özel indirimlerden haberdar olmak istiyorum.</span>
+                        </label>
+                    </div>
+                    <button class="signup-form-button">ÜYE OL</button>
+                    <div class="terms-text">
+                        Üye ol butonuna tıklayarak <a href="#" class="terms-link">Üyelik Sözleşmesi</a>'ni ve <a href="#" class="terms-link">KVKK Aydınlatma Metni</a>'ni okuduğunuzu ve kabul ettiğinizi onaylıyorsunuz.
+                    </div>
+                </div>
+                <div class="hero-section" style="opacity: 0; visibility: hidden;">
                     <div class="brand-logo">
                         <img src="/public/ltb-logo.png" alt="LTB Logo" id="brandLogo">
                     </div>
-                    <img class="hero-image" src="/public/hero-image-1.jpg" alt="LTB Koleksiyon">
+                    <img class="hero-image" src="/public/hero-image-4.jpg" alt="LTB Koleksiyon">
                     <img class="hero-image" src="/public/hero-image-2.jpg" alt="LTB Koleksiyon">
                     <img class="hero-image" src="/public/hero-image-3.jpg" alt="LTB Koleksiyon">
+                    <img class="hero-image" src="/public/hero-image-1.jpg" alt="LTB Koleksiyon">
                 </div>
                 <div class="product-detail">
                     <div class="detail-header">
-                        <div class="detail-back">←</div>
+                        <div class="detail-back">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M16 4L8 12L16 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <div class="detail-favorite">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
@@ -1065,30 +1729,30 @@
                     </div>
                 </div>
                 <div class="search-overlay">
-                    <div class="search-header">
-                        <h2>Ne arıyorsunuz?</h2>
-                    </div>
-                    <div class="search-suggestions">
-                        <div class="suggestion">Blazer</div>
-                        <div class="suggestion">Bomber Ceket</div>
-                        <div class="suggestion">Sweatshirt</div>
-                        <div class="suggestion">Palto</div>
-                        <div class="suggestion">Kaban</div>
-                    </div>
-                    <div class="search-input-container">
-                        <div class="search-input-wrapper">
-                            <span>⚲</span>
-                            <span class="search-text">Konuşmak için basın</span>
-                            <span class="mic-icon">⦿</span>
+                    <div class="search-container">
+                        <div class="search-header">
+                            <div class="close-search">×</div>
                         </div>
-                    </div>
-                    <div class="related-products">
-                        İLGİNİZİ ÇEKEBİLECEK DİĞER ÜRÜNLER
+                        <div class="search-input-container">
+                            <input type="text" class="search-input" placeholder="Ne arıyorsunuz?">
+                            <div class="voice-search">⦿</div>
+                        </div>
+                        <div class="search-suggestions">
+                            <div class="suggestion">Blazer</div>
+                            <div class="suggestion">Bomber Ceket</div>
+                            <div class="suggestion">Sweatshirt</div>
+                            <div class="suggestion">Palto</div>
+                            <div class="suggestion">Kaban</div>
+                        </div>
                     </div>
                 </div>
                 <div class="product-list">
                     <div class="product-header">
-                        <div class="back-button">←</div>
+                        <div class="back-button">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M16 4L8 12L16 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <div class="view-options">
                             <div class="view-option">□</div>
                             <div class="view-option active">▥</div>
@@ -1320,7 +1984,7 @@
                 <!-- Sıralama Filtresi -->
                 <div class="filter-overlay" id="sortOverlay">
                     <div class="filter-header">
-                        <div class="filter-title">Sıralama</div>
+                        <div class="filter-title">SIRALAMA</div>
                         <div class="close-filter">×</div>
                     </div>
                     <div class="filter-content">
@@ -1334,25 +1998,19 @@
                             <div class="sort-item">
                                 <div style="display: flex; align-items: center;">
                                     <div class="sort-checkbox"></div>
-                                    <span>Fiyat (Azalan)</span>
+                                    <span>Fiyata Göre (Azalan)</span>
                                 </div>
                             </div>
                             <div class="sort-item">
                                 <div style="display: flex; align-items: center;">
                                     <div class="sort-checkbox"></div>
-                                    <span>Fiyat (Artan)</span>
+                                    <span>Fiyata Göre (Artan)</span>
                                 </div>
                             </div>
                             <div class="sort-item">
                                 <div style="display: flex; align-items: center;">
                                     <div class="sort-checkbox"></div>
                                     <span>En Yeniler</span>
-                                </div>
-                            </div>
-                            <div class="sort-item">
-                                <div style="display: flex; align-items: center;">
-                                    <div class="sort-checkbox"></div>
-                                    <span>En Çok Satanlar</span>
                                 </div>
                             </div>
                         </div>
@@ -1366,7 +2024,7 @@
                 <!-- Beden Filtresi -->
                 <div class="filter-overlay" id="sizeOverlay">
                     <div class="filter-header">
-                        <div class="filter-title">Beden</div>
+                        <div class="filter-title">BEDEN</div>
                         <div class="close-filter">×</div>
                     </div>
                     <div class="filter-content">
@@ -1417,7 +2075,7 @@
                 <!-- Fiyat Filtresi -->
                 <div class="filter-overlay" id="priceOverlay">
                     <div class="filter-header">
-                        <div class="filter-title">Fiyat</div>
+                        <div class="filter-title">FİYAT</div>
                         <div class="close-filter">×</div>
                     </div>
                     <div class="filter-content">
@@ -1427,14 +2085,14 @@
                                     <div class="price-checkbox"></div>
                                     <span>0 TL - 500 TL</span>
                                 </div>
-                                <span>[18]</span>
+                                <span>[45]</span>
                             </div>
                             <div class="price-item">
                                 <div style="display: flex; align-items: center;">
                                     <div class="price-checkbox"></div>
                                     <span>500 TL - 1000 TL</span>
                                 </div>
-                                <span>[45]</span>
+                                <span>[78]</span>
                             </div>
                             <div class="price-item">
                                 <div style="display: flex; align-items: center;">
@@ -1446,16 +2104,9 @@
                             <div class="price-item">
                                 <div style="display: flex; align-items: center;">
                                     <div class="price-checkbox"></div>
-                                    <span>1500 TL - 2000 TL</span>
+                                    <span>1500 TL ve üzeri</span>
                                 </div>
                                 <span>[34]</span>
-                            </div>
-                            <div class="price-item">
-                                <div style="display: flex; align-items: center;">
-                                    <div class="price-checkbox"></div>
-                                    <span>2000 TL ve üzeri</span>
-                                </div>
-                                <span>[21]</span>
                             </div>
                         </div>
                     </div>
@@ -1471,8 +2122,7 @@
                 <div class="nav-bar">
                     <div class="nav-item">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 12l9-9 9 9"/>
-                            <path d="M5 10v10a2 2 0 0 1-2 2h10a2 2 0 0 1 2-2V10"/>
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                         </svg>
                     </div>
                     <div class="nav-item">
@@ -1499,292 +2149,593 @@
         </div>
     </div>
     <script>
-        const appContent = document.getElementById('appContent');
-        const brandLogo = document.getElementById('brandLogo');
-        const heroImages = document.querySelectorAll('.hero-image');
-        let currentImageIndex = 0;
-        let direction = 1; // 1 ileri, -1 geri
-        let sliderInterval = null; // Slider interval'ini başta tanımla
-        
-        // Otomatik scroll fonksiyonu
-        function autoScroll() {
-            currentImageIndex += direction;
-            
-            // Son görsele geldiğinde yönü değiştir
-            if (currentImageIndex >= heroImages.length - 1) {
-                direction = -1;
-            }
-            // İlk görsele geldiğinde yönü değiştir
-            else if (currentImageIndex <= 0) {
-                direction = 1;
-            }
-            
-            const nextImage = heroImages[currentImageIndex];
-            const scrollPosition = nextImage.offsetTop;
-            
-            heroSection.scrollTo({
-                top: scrollPosition,
-                behavior: 'smooth'
-            });
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const splashScreen = document.querySelector('.splash-screen');
+            const loginPage = document.querySelector('.login-page');
+            const loginForm = document.querySelector('.login-form');
+            const signupForm = document.querySelector('.signup-form');
+            const heroSection = document.querySelector('.hero-section');
+            const loginGuest = document.querySelector('.login-guest');
+            const loginButton = document.getElementById('loginButton');
+            const signupButton = document.querySelector('.login-secondary');
+            const signupSubmitButton = document.querySelector('.signup-form-button');
+            const backToLogin = document.querySelectorAll('.back-to-login');
+            const togglePassword = document.querySelector('.toggle-password');
+            const passwordInput = document.querySelector('input[type="password"]');
+            const signupLink = document.querySelector('.signup-link');
+            const loginFormButton = document.querySelector('.login-form-button');
+            const emailInput = document.getElementById('emailInput');
+            const errorMessages = document.querySelectorAll('.error-message');
 
-        // Slider'ı başlat
-        function startSlider() {
-            if (!sliderInterval) {
+            // Login sayfasını başlangıçta göster ama opacity 0 olsun
+            loginPage.style.display = 'flex';
+
+            // Splash screen'den login sayfasına geçiş
+            setTimeout(() => {
+                splashScreen.style.opacity = '0';
+                splashScreen.style.visibility = 'hidden';
+                loginPage.classList.add('active');
+            }, 2000);
+
+            // İlk giriş yap butonuna tıklandığında
+            loginButton.addEventListener('click', () => {
+                loginPage.classList.remove('active');
+                loginForm.style.display = 'flex';
+                
+                requestAnimationFrame(() => {
+                    loginForm.classList.add('active');
+                });
+            });
+
+            // Input alanlarına yazı yazıldığında hata mesajını kaldır
+            emailInput.addEventListener('input', () => {
+                emailInput.classList.remove('error');
+                emailInput.nextElementSibling.style.display = 'none';
+            });
+
+            passwordInput.addEventListener('input', () => {
+                passwordInput.classList.remove('error');
+                passwordInput.parentElement.nextElementSibling.style.display = 'none';
+            });
+
+            // Giriş yap butonuna tıklandığında validasyon
+            loginFormButton.addEventListener('click', () => {
+                let isValid = true;
+                
+                // E-posta kontrolü
+                if (!emailInput.value) {
+                    emailInput.classList.add('error');
+                    emailInput.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                } else {
+                    emailInput.classList.remove('error');
+                    emailInput.nextElementSibling.style.display = 'none';
+                }
+                
+                // Şifre kontrolü
+                if (!passwordInput.value) {
+                    passwordInput.classList.add('error');
+                    passwordInput.parentElement.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                } else {
+                    passwordInput.classList.remove('error');
+                    passwordInput.parentElement.nextElementSibling.style.display = 'none';
+                }
+
+                // Eğer form geçerliyse ana sayfaya yönlendir
+                if (isValid) {
+                    loginForm.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        loginForm.style.display = 'none';
+                        heroSection.style.opacity = '1';
+                        heroSection.style.visibility = 'visible';
+                        startSlider(); // Slider'ı başlat
+                    }, 500);
+                }
+            });
+
+            // Geri butonuna tıklandığında
+            backToLogin.forEach(button => {
+                button.addEventListener('click', () => {
+                    const activeForm = document.querySelector('.login-form.active') || document.querySelector('.signup-form.active');
+                    if (activeForm) {
+                        activeForm.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            activeForm.style.display = 'none';
+                            loginPage.style.display = 'flex';
+                            
+                            setTimeout(() => {
+                                loginPage.style.opacity = '1';
+                            }, 50);
+                        }, 300);
+                    }
+                });
+            });
+
+            // Şifre göster/gizle
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            });
+
+            // Misafir girişi ile ana sayfaya geçiş
+            loginGuest.addEventListener('click', () => {
+                loginPage.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loginPage.style.display = 'none';
+                    heroSection.style.opacity = '1';
+                    heroSection.style.visibility = 'visible';
+                    startSlider(); // Slider'ı başlat
+                }, 300);
+            });
+
+            // Üye ol linkine tıklandığında
+            signupLink.addEventListener('click', () => {
+                loginForm.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loginForm.style.display = 'none';
+                    loginPage.style.display = 'flex';
+                    
+                    setTimeout(() => {
+                        loginPage.style.opacity = '1';
+                    }, 50);
+                }, 300);
+            });
+
+            // Üye ol butonuna tıklandığında
+            signupButton.addEventListener('click', () => {
+                loginPage.classList.remove('active');
+                signupForm.style.display = 'flex';
+                
+                requestAnimationFrame(() => {
+                    signupForm.classList.add('active');
+                });
+            });
+
+            // Ana sayfa özellikleri
+            const appContent = document.getElementById('appContent');
+            const brandLogo = document.getElementById('brandLogo');
+            const heroImages = document.querySelectorAll('.hero-image');
+            let currentImageIndex = 0;
+            let direction = 1; // 1 ileri, -1 geri
+            let sliderInterval = null;
+
+            // Otomatik scroll fonksiyonu
+            function autoScroll() {
+                currentImageIndex += direction;
+                
+                // Son görsele geldiğinde yönü değiştir
+                if (currentImageIndex >= heroImages.length - 1) {
+                    direction = -1;
+                }
+                // İlk görsele geldiğinde yönü değiştir
+                else if (currentImageIndex <= 0) {
+                    direction = 1;
+                }
+                
+                const nextImage = heroImages[currentImageIndex];
+                const scrollPosition = nextImage.offsetTop;
+                
+                heroSection.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Slider'ı başlat
+            function startSlider() {
+                stopSlider(); // Önceki interval'i temizle
                 currentImageIndex = 0;
                 direction = 1;
                 sliderInterval = setInterval(autoScroll, 5000);
             }
-        }
 
-        // Slider'ı durdur
-        function stopSlider() {
-            if (sliderInterval) {
-                clearInterval(sliderInterval);
-                sliderInterval = null;
+            // Slider'ı durdur
+            function stopSlider() {
+                if (sliderInterval) {
+                    clearInterval(sliderInterval);
+                    sliderInterval = null;
+                }
             }
-        }
 
-        // İlk başta slider'ı başlat
-        startSlider();
+            // Logo renk değişimi için scroll event listener
+            const logoColors = {
+                0: { filter: 'brightness(0) invert(1)', mixBlendMode: 'overlay' }, // Beyaz logo
+                1: { filter: 'brightness(0)', mixBlendMode: 'normal' }, // Siyah logo
+                2: { filter: 'invert(73%) sepia(88%) saturate(1784%) hue-rotate(359deg) brightness(105%) contrast(106%)', mixBlendMode: 'normal' }, // Sarı logo
+                3: { filter: 'brightness(0) invert(1)', mixBlendMode: 'overlay' } // Beyaz logo
+            };
 
-        // Logo renk değişimi için scroll event listener
-        const heroSection = document.querySelector('.hero-section');
-        heroSection.addEventListener('scroll', () => {
-            const scrollPosition = heroSection.scrollTop;
-            const firstThreshold = 100;  // Beyazdan siyaha
-            const secondThreshold = 300; // Siyahtan sarıya
-            
-            if (scrollPosition > secondThreshold) {
-                brandLogo.style.filter = 'brightness(0) sepia(1) saturate(10) hue-rotate(40deg)'; // Sarı tonu
-                brandLogo.style.mixBlendMode = 'normal';
-            } else if (scrollPosition > firstThreshold) {
-                brandLogo.style.filter = 'brightness(0)'; // Siyah
-                brandLogo.style.mixBlendMode = 'normal';
-            } else {
-                brandLogo.style.filter = 'brightness(0) invert(1)'; // Beyaz
-                brandLogo.style.mixBlendMode = 'overlay';
-            }
-        });
-
-        // Menü işlemleri
-        const menuButton = document.querySelector('.nav-item.text-only');
-        const menuOverlay = document.querySelector('.menu-overlay');
-        const menuContainer = document.querySelector('.menu-container');
-        const closeMenu = document.querySelector('.close-menu');
-        const menuCategories = document.querySelectorAll('.menu-category');
-        const subcategories = document.querySelectorAll('.subcategories');
-
-        menuButton.addEventListener('click', () => {
-            menuOverlay.classList.add('active');
-            menuContainer.classList.add('active');
-            stopSlider(); // Slider'ı durdur
-            appContent.style.overflow = 'hidden';
-        });
-
-        closeMenu.addEventListener('click', () => {
-            menuOverlay.classList.remove('active');
-            menuContainer.classList.remove('active');
-            startSlider(); // Slider'ı başlat
-            appContent.style.overflow = 'auto';
-        });
-
-        menuOverlay.addEventListener('click', (e) => {
-            if (e.target === menuOverlay) {
-                menuOverlay.classList.remove('active');
-                menuContainer.classList.remove('active');
-                startSlider(); // Slider'ı başlat
-                appContent.style.overflow = 'auto';
-            }
-        });
-
-        menuCategories.forEach(category => {
-            category.addEventListener('click', () => {
-                // Aktif kategoriyi değiştir
-                menuCategories.forEach(c => c.classList.remove('active'));
-                category.classList.add('active');
-
-                // İlgili alt kategorileri göster
-                const categoryName = category.dataset.category;
-                subcategories.forEach(sub => {
-                    if (sub.dataset.category === categoryName) {
-                        sub.classList.add('active');
-                    } else {
-                        sub.classList.remove('active');
-                    }
-                });
+            heroSection.addEventListener('scroll', () => {
+                const scrollPosition = heroSection.scrollTop;
+                const imageHeight = heroImages[0].offsetHeight;
+                const currentImageIndex = Math.floor(scrollPosition / imageHeight);
+                
+                const logoStyle = logoColors[currentImageIndex] || logoColors[0];
+                brandLogo.style.filter = logoStyle.filter;
+                brandLogo.style.mixBlendMode = logoStyle.mixBlendMode;
             });
-        });
 
-        // Arama işlemleri
-        const searchBar = document.querySelector('.search-bar');
-        const searchOverlay = document.querySelector('.search-overlay');
+            // Arama işlemleri
+            const searchBar = document.querySelector('.search-bar');
+            const searchIcon = document.querySelector('.nav-bar .nav-item:nth-child(2)');
+            const searchOverlay = document.querySelector('.search-overlay');
+            const closeSearch = document.querySelector('.close-search');
 
-        searchBar.addEventListener('click', () => {
-            searchOverlay.classList.add('active');
-            stopSlider();
-            appContent.style.overflow = 'hidden';
-        });
+            function openSearch() {
+                searchOverlay.classList.add('active');
+                stopSlider();
+                appContent.style.overflow = 'hidden';
+            }
 
-        searchOverlay.addEventListener('click', (e) => {
-            if (e.target === searchOverlay) {
+            function closeSearchHandler() {
                 searchOverlay.classList.remove('active');
                 startSlider();
                 appContent.style.overflow = 'auto';
             }
-        });
 
-        // Ürün listesi işlemleri
-        const newCollectionLink = document.querySelector('.subcategory');
-        const productList = document.querySelector('.product-list');
-        const backButton = document.querySelector('.back-button');
-
-        newCollectionLink.addEventListener('click', () => {
-            productList.classList.add('active');
-            menuOverlay.classList.remove('active');
-            menuContainer.classList.remove('active');
-            stopSlider();
-            appContent.style.overflow = 'hidden';
-            // Slider'ı tamamen durdur ve arka plan hareketlerini engelle
-            currentImageIndex = 0;
-            direction = 1;
-            appContent.scrollTo({
-                top: 0,
-                behavior: 'instant'
-            });
-        });
-
-        backButton.addEventListener('click', () => {
-            productList.classList.remove('active');
-            appContent.style.overflow = 'auto';
-            // Ana sayfaya dönüldüğünde slider'ı yeniden başlat
-            startSlider();
-        });
-
-        // Filtre işlemleri
-        const filterOptions = document.querySelectorAll('.filter-option');
-        const filterOverlays = {
-            'SIRALAMA': document.getElementById('sortOverlay'),
-            'RENK': document.querySelector('.filter-overlay'),
-            'BEDEN': document.getElementById('sizeOverlay'),
-            'FİYAT': document.getElementById('priceOverlay')
-        };
-        const closeButtons = document.querySelectorAll('.close-filter');
-
-        filterOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                const filterType = option.textContent;
-                const overlay = filterOverlays[filterType];
-                if (overlay) {
-                    overlay.style.display = 'flex';
-                    requestAnimationFrame(() => {
-                        overlay.classList.add('active');
-                    });
+            searchBar.addEventListener('click', openSearch);
+            searchIcon.addEventListener('click', openSearch);
+            closeSearch.addEventListener('click', closeSearchHandler);
+            
+            // Arama overlay'ine tıklandığında
+            searchOverlay.addEventListener('click', (e) => {
+                // Eğer tıklanan element search-container veya onun alt elementi değilse kapat
+                if (!e.target.closest('.search-container')) {
+                    closeSearchHandler();
                 }
             });
-        });
 
-        closeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const overlay = button.closest('.filter-overlay');
-                if (overlay) {
-                    overlay.classList.remove('active');
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 300);
+            // Menü işlemleri
+            const menuButton = document.querySelector('.nav-item.text-only');
+            const menuOverlay = document.querySelector('.menu-overlay');
+            const menuContainer = document.querySelector('.menu-container');
+            const closeMenu = document.querySelector('.close-menu');
+            const menuCategories = document.querySelectorAll('.menu-category');
+            const subcategories = document.querySelectorAll('.subcategories');
+            const newArrivalsLink = document.querySelector('.subcategory');
+            const productList = document.querySelector('.product-list');
+
+            function openMenu() {
+                if (menuOverlay.classList.contains('active')) {
+                    closeMenuHandler();
+                } else {
+                    menuOverlay.classList.add('active');
+                    menuContainer.classList.add('active');
+                    stopSlider();
+                    appContent.style.overflow = 'hidden';
+                }
+            }
+
+            function closeMenuHandler() {
+                menuOverlay.classList.remove('active');
+                menuContainer.classList.remove('active');
+                startSlider();
+                appContent.style.overflow = 'auto';
+            }
+
+            menuButton.addEventListener('click', openMenu);
+            closeMenu.addEventListener('click', closeMenuHandler);
+            
+            // Menü overlay'ine tıklandığında
+            menuOverlay.addEventListener('click', (e) => {
+                // Eğer tıklanan element menu-container veya onun alt elementi değilse kapat
+                if (!e.target.closest('.menu-container')) {
+                    closeMenuHandler();
                 }
             });
-        });
 
-        // Checkbox işlemleri
-        const checkboxes = document.querySelectorAll('.sort-checkbox, .size-checkbox, .price-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('click', () => {
-                checkbox.innerHTML = checkbox.innerHTML ? '' : '✓';
-            });
-        });
-
-        // Ana sayfa ikonuna tıklama
-        const homeIcon = document.querySelector('.nav-bar .nav-item:first-child');
-        homeIcon.addEventListener('click', () => {
-            // Tüm overlayleri kapat
-            menuOverlay.classList.remove('active');
-            menuContainer.classList.remove('active');
-            searchOverlay.classList.remove('active');
-            productList.classList.remove('active');
-            
-            // Ana sayfaya dön
-            appContent.style.overflow = 'auto';
-            appContent.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-            
-            // Slider'ı yeniden başlat
-            startSlider();
-        });
-
-        // Ürün detay sayfası işlemleri
-        const productCards = document.querySelectorAll('.product-card');
-        const productDetail = document.querySelector('.product-detail');
-        const detailBack = document.querySelector('.detail-back');
-        const detailFavorite = document.querySelector('.detail-favorite');
-        const detailColors = document.querySelectorAll('.detail-color');
-
-        productCards.forEach(card => {
-            card.addEventListener('click', () => {
-                productDetail.classList.add('active');
+            // Yeni Gelenler linkine tıklandığında
+            newArrivalsLink.addEventListener('click', () => {
+                menuOverlay.classList.remove('active');
+                menuContainer.classList.remove('active');
+                productList.classList.add('active');
+                stopSlider();
                 appContent.style.overflow = 'hidden';
             });
-        });
 
-        detailBack.addEventListener('click', () => {
-            productDetail.classList.remove('active');
-            appContent.style.overflow = 'auto';
-        });
-
-        detailFavorite.addEventListener('click', () => {
-            const svg = detailFavorite.querySelector('svg');
-            if (svg.getAttribute('fill') === 'none') {
-                svg.setAttribute('fill', 'currentColor');
-            } else {
-                svg.setAttribute('fill', 'none');
-            }
-        });
-
-        detailColors.forEach(color => {
-            color.addEventListener('click', () => {
-                detailColors.forEach(c => c.classList.remove('active'));
-                color.classList.add('active');
+            // Ürün listesi geri butonuna tıklandığında
+            const backButton = document.querySelector('.back-button');
+            backButton.addEventListener('click', () => {
+                productList.classList.remove('active');
+                appContent.style.overflow = 'auto';
+                startSlider();
             });
-        });
 
-        // Ürün detay görsel scroll işlemleri
-        const detailImageContainer = document.querySelector('.detail-image-container');
-        const detailImages = document.querySelectorAll('.detail-image');
-        const imageDots = document.querySelectorAll('.image-dot');
+            // Kategori seçimi
+            menuCategories.forEach(category => {
+                category.addEventListener('click', () => {
+                    const targetCategory = category.dataset.category;
+                    menuCategories.forEach(c => c.classList.remove('active'));
+                    category.classList.add('active');
+                    subcategories.forEach(sub => {
+                        if (sub.dataset.category === targetCategory) {
+                            sub.classList.add('active');
+                        } else {
+                            sub.classList.remove('active');
+                        }
+                    });
+                });
+            });
 
-        detailImageContainer.addEventListener('scroll', () => {
-            const scrollPosition = detailImageContainer.scrollTop;
-            const imageHeight = detailImages[0].offsetHeight;
-            
-            const activeIndex = Math.round(scrollPosition / imageHeight);
-            
-            imageDots.forEach((dot, index) => {
-                if (index === activeIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
+            // ESC tuşu ile menüyü kapatma
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeMenuHandler();
+                    closeSearchHandler();
                 }
             });
-        });
 
-        imageDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                detailImageContainer.scrollTo({
-                    top: index * detailImages[0].offsetHeight,
-                    behavior: 'smooth'
+            // Ana sayfaya geçildiğinde slider'ı başlat
+            if (heroSection.style.visibility === 'visible') {
+                startSlider();
+            }
+
+            // Alt bardaki ev ikonuna tıklandığında ana sayfaya dön
+            const homeIcon = document.querySelector('.nav-bar .nav-item:first-child');
+            homeIcon.addEventListener('click', () => {
+                // Tüm overlayleri kapat
+                menuOverlay.classList.remove('active');
+                menuContainer.classList.remove('active');
+                searchOverlay.classList.remove('active');
+                productList.classList.remove('active');
+                loginForm.style.display = 'none';
+                loginPage.style.display = 'none';
+                
+                // Ana sayfayı göster
+                heroSection.style.opacity = '1';
+                heroSection.style.visibility = 'visible';
+                appContent.style.overflow = 'auto';
+                
+                // Slider'ı başlat
+                startSlider();
+            });
+
+            // Filtre işlemleri
+            const filterOptions = document.querySelectorAll('.filter-option');
+            const filterOverlays = {
+                'SIRALAMA': document.getElementById('sortOverlay'),
+                'RENK': document.querySelector('.filter-overlay'),
+                'BEDEN': document.getElementById('sizeOverlay'),
+                'FİYAT': document.getElementById('priceOverlay')
+            };
+
+            filterOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const filterType = option.textContent;
+                    const overlay = filterOverlays[filterType];
+                    if (overlay) {
+                        overlay.classList.add('active');
+                    }
                 });
+            });
+
+            // Filtre kapatma butonları
+            const closeButtons = document.querySelectorAll('.close-filter');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const overlay = button.closest('.filter-overlay');
+                    if (overlay) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+
+            // Checkbox işlemleri
+            const checkboxes = document.querySelectorAll('.sort-checkbox, .size-checkbox, .price-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', () => {
+                    checkbox.innerHTML = checkbox.innerHTML ? '' : '✓';
+                });
+            });
+
+            // Filtre overlay'lerine tıklandığında
+            const filterOverlayElements = document.querySelectorAll('.filter-overlay');
+            filterOverlayElements.forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    // Eğer tıklanan element filter-content veya onun alt elementi değilse kapat
+                    if (!e.target.closest('.filter-content') && !e.target.closest('.filter-header') && !e.target.closest('.filter-footer')) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+
+            // Ürün kartlarına tıklandığında
+            const productCards = document.querySelectorAll('.product-card');
+            const productDetail = document.querySelector('.product-detail');
+            const detailBack = document.querySelector('.detail-back');
+            const detailFavorite = document.querySelector('.detail-favorite');
+            const detailColors = document.querySelectorAll('.detail-color');
+
+            productCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    productDetail.classList.add('active');
+                    appContent.style.overflow = 'hidden';
+                });
+            });
+
+            detailBack.addEventListener('click', () => {
+                productDetail.classList.remove('active');
+                appContent.style.overflow = 'auto';
+            });
+
+            detailFavorite.addEventListener('click', () => {
+                const svg = detailFavorite.querySelector('svg');
+                if (svg.getAttribute('fill') === 'none') {
+                    svg.setAttribute('fill', 'currentColor');
+                } else {
+                    svg.setAttribute('fill', 'none');
+                }
+            });
+
+            detailColors.forEach(color => {
+                color.addEventListener('click', () => {
+                    detailColors.forEach(c => c.classList.remove('active'));
+                    color.classList.add('active');
+                });
+            });
+
+            // Ürün detay görsel scroll işlemleri
+            const detailImageContainer = document.querySelector('.detail-image-container');
+            const detailImages = document.querySelectorAll('.detail-image');
+            const imageDots = document.querySelectorAll('.image-dot');
+
+            detailImageContainer.addEventListener('scroll', () => {
+                const scrollPosition = detailImageContainer.scrollTop;
+                const imageHeight = detailImages[0].offsetHeight;
+                
+                const activeIndex = Math.round(scrollPosition / imageHeight);
+                
+                imageDots.forEach((dot, index) => {
+                    if (index === activeIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            });
+
+            imageDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    detailImageContainer.scrollTo({
+                        top: index * detailImages[0].offsetHeight,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Üye ol formundaki input validasyonları
+            const nameInput = document.getElementById('nameInput');
+            const signupEmailInput = document.getElementById('signupEmailInput');
+            const signupPasswordInput = document.getElementById('signupPasswordInput');
+            const phoneInput = document.getElementById('phoneInput');
+            const genderInput = document.querySelector('input[name="gender"]');
+            const birthdateInput = document.getElementById('birthdateInput');
+
+            // Input alanlarına yazı yazıldığında hata mesajını kaldır
+            nameInput.addEventListener('input', () => {
+                nameInput.classList.remove('error');
+                nameInput.nextElementSibling.style.display = 'none';
+            });
+
+            signupEmailInput.addEventListener('input', () => {
+                signupEmailInput.classList.remove('error');
+                signupEmailInput.nextElementSibling.style.display = 'none';
+            });
+
+            signupPasswordInput.addEventListener('input', () => {
+                signupPasswordInput.classList.remove('error');
+                signupPasswordInput.parentElement.nextElementSibling.style.display = 'none';
+            });
+
+            phoneInput.addEventListener('input', () => {
+                phoneInput.classList.remove('error');
+                phoneInput.nextElementSibling.style.display = 'none';
+            });
+
+            genderInput.addEventListener('input', () => {
+                genderInput.classList.remove('error');
+                genderInput.parentElement.nextElementSibling.style.display = 'none';
+            });
+
+            birthdateInput.addEventListener('input', () => {
+                birthdateInput.classList.remove('error');
+                birthdateInput.nextElementSibling.style.display = 'none';
+            });
+
+            // Üye ol butonuna tıklandığında validasyon
+            signupSubmitButton.addEventListener('click', () => {
+                let isValid = true;
+                
+                // Ad Soyad kontrolü
+                if (!nameInput.value) {
+                    nameInput.classList.add('error');
+                    nameInput.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // E-posta kontrolü
+                if (!signupEmailInput.value) {
+                    signupEmailInput.classList.add('error');
+                    signupEmailInput.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Şifre kontrolü
+                if (!signupPasswordInput.value) {
+                    signupPasswordInput.classList.add('error');
+                    signupPasswordInput.parentElement.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                }
+
+                // Telefon numarası kontrolü
+                if (!phoneInput.value) {
+                    phoneInput.classList.add('error');
+                    phoneInput.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                }
+
+                // Cinsiyet kontrolü
+                if (!genderInput.checked) {
+                    genderInput.classList.add('error');
+                    genderInput.parentElement.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                }
+
+                // Doğum tarihi kontrolü
+                if (!birthdateInput.value) {
+                    birthdateInput.classList.add('error');
+                    birthdateInput.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                }
+
+                // Eğer form geçerliyse ana sayfaya yönlendir
+                if (isValid) {
+                    signupForm.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        signupForm.style.display = 'none';
+                        heroSection.style.opacity = '1';
+                        heroSection.style.visibility = 'visible';
+                        startSlider(); // Slider'ı başlat
+                    }, 500);
+                }
+            });
+
+            // Tüm geri butonlarına tıklandığında
+            document.addEventListener('click', (e) => {
+                const clickedElement = e.target.closest('.back-button, .detail-back, .back-to-login');
+                
+                if (clickedElement) {
+                    // Ürün detay sayfasından geri dönüş
+                    if (clickedElement.classList.contains('detail-back')) {
+                        productDetail.classList.remove('active');
+                        appContent.style.overflow = 'auto';
+                    }
+                    // Ürün listesinden geri dönüş
+                    else if (clickedElement.classList.contains('back-button')) {
+                        productList.classList.remove('active');
+                        menuOverlay.classList.add('active');
+                        menuContainer.classList.add('active');
+                    }
+                    // Login/Signup formlarından geri dönüş
+                    else if (clickedElement.classList.contains('back-to-login')) {
+                        const activeForm = document.querySelector('.signup-form.active') || document.querySelector('.login-form.active');
+                        if (activeForm) {
+                            activeForm.classList.remove('active');
+                            
+                            setTimeout(() => {
+                                activeForm.style.display = 'none';
+                                loginPage.classList.add('active');
+                            }, 300);
+                        }
+                    }
+                }
             });
         });
     </script>
