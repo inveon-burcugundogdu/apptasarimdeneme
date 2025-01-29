@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>E-Ticaret App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .device-container {
+            padding: 20px;
+        }
+
+        .iphone {
+            width: 375px;
+            height: 812px;
+            background-color: white;
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+            border: 12px solid #1a1a1a;
+        }
+
+        .status-bar {
+            height: 44px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            position: absolute;
+            width: 100%;
+            z-index: 1000;
+            background: transparent;
+        }
+
+        .time {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .status-icons span {
+            color: #fff;
+            margin-left: 8px;
+        }
+
+        .app-content {
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background-color: #fff;
+            position: relative;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            touch-action: pan-y;
+            -webkit-touch-action: pan-y;
+            overscroll-behavior-x: none;
+        }
+
+        .app-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hero-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            touch-action: pan-y;
+            -webkit-touch-action: pan-y;
+            overflow-x: hidden;
+            overflow-y: auto;
+            overscroll-behavior-x: none;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .hero-section::-webkit-scrollbar {
+            display: none;
+        }
+
+        .brand-logo {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: auto;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: auto;
+            filter: brightness(0) invert(1);
+            mix-blend-mode: overlay;
+            transition: all 0.3s ease;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+            min-height: 100%;
+        }
+
+        .bottom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: none;
+        }
+
+        .search-bar {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 30px;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: calc(100% - 24px);
+            text-align: center;
+            margin: 0 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .nav-bar {
+            height: 45px;
+            background-color: rgba(0, 0, 0, 0.8);
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+
+        .nav-item {
+            font-size: 20px;
+            padding: 8px;
+            cursor: pointer;
+            color: #fff;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 300;
+        }
+
+        .nav-item.text-only {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 8px;
+            font-weight: 500;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+        }
+
+        /* Menü Sistemi */
+        .menu-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-container {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: calc(100% - 120px);
+            background: #000;
+            z-index: 1501;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 60px 20px 0;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -ms-overflow-style: none;  /* IE ve Edge için */
+            scrollbar-width: none;  /* Firefox için */
+        }
+
+        .menu-container.active {
+            right: 0;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-header {
+            padding: 0 10px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .menu-categories {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .menu-category {
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .menu-category.active {
+            opacity: 1;
+        }
+
+        .subcategories {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            padding: 0 10px;
+        }
+
+        .subcategories.active {
+            display: flex;
+        }
+
+        .subcategory:first-child {
+            background: #FFE500;
+            color: #000;
+            padding: 8px 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .subcategory {
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 0;
+            color: #fff;
+        }
+
+        .subcategory:hover {
+            opacity: 1;
+        }
+
+        .close-menu {
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .highlight {
+            background: #FFE500;
+            color: #000;
+            padding: 8px 15px;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        .search-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 2500;
+            display: none;
+            flex-direction: column;
+        }
+
+        .search-overlay.active {
+            display: flex;
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 20px 20px;
+        }
+
+        .search-header h2 {
+            color: #fff;
+            font-weight: 300;
+            font-size: 24px;
+        }
+
+        .search-suggestions {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .search-suggestions::-webkit-scrollbar {
+            display: none;
+        }
+
+        .suggestion {
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: #fff;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .search-input-container {
+            position: relative;
+            padding: 0 20px;
+            margin-top: 20px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .search-input-wrapper .mic-icon {
+            position: absolute;
+            right: 15px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .search-text {
+            color: #fff;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .related-products {
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .product-list {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1500;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .product-list.active {
+            display: flex;
+        }
+
+        .product-header {
+            padding: 50px 20px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2600;
+            background: transparent;
+        }
+
+        .back-button {
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 5px;
+            padding: 0 5px;
+            overflow-x: hidden;
+            position: absolute;
+            top: 90px;
+            left: 0;
+            right: 0;
+            z-index: 2600;
+            background: transparent;
+            white-space: nowrap;
+        }
+
+        .filter-option {
+            color: #fff;
+            padding: 12px 20px;
+            white-space: normal;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0;
+            margin: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .products-grid {
+            margin-top: 140px;
+            margin-bottom: 120px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            padding: 0;
+            background: #000;
+            overflow-y: auto;
+            height: calc(100% - 260px);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;  /* Firefox için */
+            -ms-overflow-style: none;  /* IE ve Edge için */
+        }
+
+        .products-grid::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari ve Opera için */
+        }
+
+        .product-card {
+            position: relative;
+            aspect-ratio: 3/4;
+            background: #000;
+            height: 220px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 3/4;
+        }
+
+        .product-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            color: #fff;
+            background: #000;
+        }
+
+        .product-name {
+            font-size: 10px;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            -webkit-line-clamp: unset;
+            -webkit-box-orient: unset;
+        }
+
+        .product-price {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .product-colors {
+            position: absolute;
+            bottom: 40px;
+            left: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .color-option {
+            font-size: 11px;
+            color: #fff;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 4px;
+        }
+
+        .product-actions {
+            position: absolute;
+            bottom: 40px;
+            right: 8px;
+        }
+
+        .product-action {
+            color: #fff;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .view-option {
+            color: #fff;
+            font-size: 18px;
+            opacity: 0.5;
+        }
+
+        .view-option.active {
+            opacity: 1;
+        }
+
+        .filter-overlay {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 2700;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            transform: translateX(0);
+        }
+
+        .filter-overlay.active {
+            transform: translateX(-100%);
+        }
+
+        .filter-header {
+            padding: 50px 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .close-filter {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .filter-content {
+            flex: 1;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .color-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .color-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .color-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .color-left {
+            display: flex;
+            align-items: center;
+            width: 150px;
+            cursor: pointer;
+        }
+
+        .color-left span {
+            width: 80px;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .color-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .color-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 15px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .color-item span:last-child {
+            color: #666;
+            width: 50px;
+            text-align: right;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .filter-footer {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-button {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .clear-button {
+            background: #fff;
+            border: 1px solid #000;
+        }
+
+        .apply-button {
+            background: #000;
+            color: #fff;
+            border: none;
+        }
+
+        .menu-container::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari ve Opera için */
+        }
+
+        /* Sıralama Filtresi */
+        .sort-list, .size-list, .price-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .sort-item, .size-item, .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .sort-item:hover, .size-item:hover, .price-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .sort-checkbox, .size-checkbox, .price-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        /* Ürün Detay Sayfası */
+        .product-detail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: none;  /* IE ve Edge için */
+            scrollbar-width: none;  /* Firefox için */
+        }
+
+        .product-detail.active {
+            display: flex;
+        }
+
+        .product-detail::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari ve Opera için */
+        }
+
+        .detail-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 3001;
+        }
+
+        .detail-back, .detail-favorite {
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .detail-image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin-top: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            transition: transform 0.5s ease;
+        }
+
+        .image-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 3002;
+            padding: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .image-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.3);
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .image-dot.active {
+            background: #000;
+            transform: scale(1.5);
+        }
+
+        .detail-info {
+            background: #fff;
+            padding: 30px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+            border-radius: 25px 25px 0 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .detail-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: #000;
+        }
+
+        .detail-price {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .detail-color-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .detail-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .detail-color.active {
+            border-color: #000;
+        }
+
+        .detail-color-name {
+            font-size: 16px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+        .detail-action-button {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="iphone">
+            <div class="status-bar">
+                <div class="time">22:27</div>
+                <div class="status-icons">
+                    <span class="signal">📶</span>
+                    <span class="wifi">📡</span>
+                    <span class="battery">🔋</span>
+                </div>
+            </div>
+
+            <div class="app-content" id="appContent">
+                <div class="hero-section">
+                    <div class="brand-logo">
+                        <img src="ltb-logo.png" alt="LTB Logo" id="brandLogo">
+                    </div>
+                    <img class="hero-image" src="hero-image-1.jpg" alt="LTB Koleksiyon">
+                    <img class="hero-image" src="hero-image-2.jpg" alt="LTB Koleksiyon">
+                    <img class="hero-image" src="hero-image-3.jpg" alt="LTB Koleksiyon">
+                </div>
+                <div class="product-detail">
+                    <div class="detail-header">
+                        <div class="detail-back">←</div>
+                        <div class="detail-favorite">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="detail-image-container">
+                        <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün Detay" class="detail-image">
+                        <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün Detay" class="detail-image">
+                        <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün Detay" class="detail-image">
+                        <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün Detay" class="detail-image">
+                    </div>
+                    <div class="image-dots">
+                        <div class="image-dot active"></div>
+                        <div class="image-dot"></div>
+                        <div class="image-dot"></div>
+                        <div class="image-dot"></div>
+                    </div>
+                    <div class="detail-info">
+                        <div class="detail-title">Long oversized double-breasted trench coat</div>
+                        <div class="detail-price">3.999,99 TL</div>
+                        <div class="detail-color-name">Ekrü</div>
+                        <div class="detail-color-options">
+                            <div class="detail-color active" style="background: #000000"></div>
+                            <div class="detail-color" style="background: #F5F5DC"></div>
+                            <div class="detail-color" style="background: #EDEADE"></div>
+                        </div>
+                        <button class="detail-action-button">EKLE</button>
+                    </div>
+                </div>
+                <div class="menu-overlay">
+                    <div class="menu-container">
+                        <div class="menu-header">
+                            <div class="close-menu">×</div>
+                        </div>
+                        <div class="menu-categories">
+                            <div class="menu-category active" data-category="kadin">KADIN</div>
+                            <div class="menu-category" data-category="erkek">ERKEK</div>
+                            <div class="menu-category" data-category="cocuk">ÇOCUK</div>
+                            <div class="menu-category" data-category="jean">JEAN</div>
+                        </div>
+                        
+                        <div class="subcategories active" data-category="kadin">
+                            <div class="subcategory">Yeni Gelenler</div>
+                            <div class="subcategory">Tüm ürünleri gör</div>
+                            <div class="subcategory">Üst Giyim</div>
+                            <div class="subcategory">Atlet</div>
+                            <div class="subcategory">T-shirt</div>
+                            <div class="subcategory">Gömlek</div>
+                            <div class="subcategory">Bluz</div>
+                            <div class="subcategory">Elbise</div>
+                            <div class="subcategory">Büstiyer</div>
+                            <div class="subcategory">Sweatshirt</div>
+                            <div class="subcategory">Triko</div>
+                            <div class="subcategory">Hırka</div>
+                            <div class="subcategory">Mont</div>
+                            <div class="subcategory">Ceket</div>
+                            <div class="subcategory">Yelek</div>
+                            <div class="subcategory">Alt Giyim</div>
+                            <div class="subcategory">Pantolon</div>
+                            <div class="subcategory">Eşofman Altı</div>
+                            <div class="subcategory">Etek</div>
+                            <div class="subcategory">Şort</div>
+                            <div class="subcategory">Aksesuar</div>
+                            <div class="subcategory">Çanta</div>
+                            <div class="subcategory">Cüzdan</div>
+                            <div class="subcategory">Çorap</div>
+                            <div class="subcategory">Gözlük</div>
+                            <div class="subcategory">Kolye</div>
+                            <div class="subcategory">Bileklik</div>
+                            <div class="subcategory">Şapka</div>
+                            <div class="subcategory">Şal</div>
+                            <div class="subcategory">Bere</div>
+                            <div class="subcategory">Eldiven</div>
+                        </div>
+
+                        <div class="subcategories" data-category="cocuk">
+                            <div class="subcategory">Yeni Gelenler</div>
+                            <div class="subcategory">Kız Çocuk</div>
+                            <div class="subcategory">Erkek Çocuk</div>
+                            <div class="subcategory">Kız</div>
+                            <div class="subcategory">Sweatshirt</div>
+                            <div class="subcategory">Şort</div>
+                            <div class="subcategory">Erkek</div>
+                            <div class="subcategory">Sweatshirt</div>
+                            <div class="subcategory">Şort</div>
+                            <div class="subcategory">Jeans</div>
+                            <div class="subcategory">Kız Çocuk Jeans</div>
+                            <div class="subcategory">Erkek Çocuk Jeans</div>
+                        </div>
+
+                        <div class="subcategories" data-category="jean">
+                            <div class="subcategory">Kadın Jean</div>
+                            <div class="subcategory">Skinny</div>
+                            <div class="subcategory">Slim Fit</div>
+                            <div class="subcategory">Mom Jeans</div>
+                            <div class="subcategory">Straight</div>
+                            <div class="subcategory">Baloon Fit</div>
+                            <div class="subcategory">Flare</div>
+                            <div class="subcategory">Wide Leg</div>
+                            <div class="subcategory">Relaxed Leg</div>
+                            <div class="subcategory">Paper Bag</div>
+                            <div class="subcategory">Boot Cut</div>
+                            <div class="subcategory">Carpenter</div>
+                            <div class="subcategory">Cargo</div>
+                            <div class="subcategory">Skater</div>
+                            <div class="subcategory">Baggy</div>
+                            <div class="subcategory">Diğer Jean'ler</div>
+                            <div class="subcategory">Ceket</div>
+                            <div class="subcategory">Gömlek</div>
+                            <div class="subcategory">Elbise</div>
+                            <div class="subcategory">Etek</div>
+                            <div class="subcategory">Şort</div>
+                            <div class="subcategory">Erkek Jean</div>
+                            <div class="subcategory">Super Skinny</div>
+                            <div class="subcategory">Skinny</div>
+                            <div class="subcategory">Slim</div>
+                            <div class="subcategory">Slim Carrot</div>
+                            <div class="subcategory">Straight</div>
+                            <div class="subcategory">Loose Fit</div>
+                            <div class="subcategory">Comfort</div>
+                            <div class="subcategory">Tapered</div>
+                            <div class="subcategory">Regular</div>
+                            <div class="subcategory">Slouchy</div>
+                            <div class="subcategory">Baggy</div>
+                            <div class="subcategory">Relaxed</div>
+                            <div class="subcategory">Skater</div>
+                            <div class="subcategory">Diğer Jean'ler</div>
+                            <div class="subcategory">Ceket</div>
+                            <div class="subcategory">Gömlek</div>
+                            <div class="subcategory">Şort</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-overlay">
+                    <div class="search-header">
+                        <h2>Ne arıyorsunuz?</h2>
+                    </div>
+                    <div class="search-suggestions">
+                        <div class="suggestion">Blazer</div>
+                        <div class="suggestion">Bomber Ceket</div>
+                        <div class="suggestion">Sweatshirt</div>
+                        <div class="suggestion">Palto</div>
+                        <div class="suggestion">Kaban</div>
+                    </div>
+                    <div class="search-input-container">
+                        <div class="search-input-wrapper">
+                            <span>⚲</span>
+                            <span class="search-text">Konuşmak için basın</span>
+                            <span class="mic-icon">⦿</span>
+                        </div>
+                    </div>
+                    <div class="related-products">
+                        İLGİNİZİ ÇEKEBİLECEK DİĞER ÜRÜNLER
+                    </div>
+                </div>
+                <div class="product-list">
+                    <div class="product-header">
+                        <div class="back-button">←</div>
+                        <div class="view-options">
+                            <div class="view-option">□</div>
+                            <div class="view-option active">▥</div>
+                        </div>
+                    </div>
+                    <div class="filter-options">
+                        <div class="filter-option">SIRALAMA</div>
+                        <div class="filter-option">RENK</div>
+                        <div class="filter-option">BEDEN</div>
+                        <div class="filter-option">FİYAT</div>
+                    </div>
+                    <div class="products-grid">
+                        <!-- İlk ürün çifti -->
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <!-- İkinci ürün çifti -->
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <!-- Üçüncü ürün çifti -->
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <!-- Dördüncü ürün çifti -->
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <!-- Beşinci ürün çifti -->
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
+                            <div class="product-colors">
+                                <div class="color-option" style="background: #FFFFFF">+3</div>
+                            </div>
+                            <div class="product-actions">
+                                <div class="product-action">☆</div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">YUMUŞAK FERMUAR DETAYLI CEKET</div>
+                                <div class="product-price">1.390,00 TL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-overlay">
+                    <div class="filter-header">
+                        <div class="filter-title">Renk</div>
+                        <div class="close-filter">×</div>
+                    </div>
+                    <div class="filter-content">
+                        <div class="color-list">
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Siyah</span>
+                                </div>
+                                <div class="color-dot" style="background: #000000"></div>
+                                <span>[148]</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Beyaz</span>
+                                </div>
+                                <div class="color-dot" style="background: #FFFFFF; border: 1px solid #ddd"></div>
+                                <span>[127]</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Mavi</span>
+                                </div>
+                                <div class="color-dot" style="background: #0000FF"></div>
+                                <span>[158]</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Kırmızı</span>
+                                </div>
+                                <div class="color-dot" style="background: #FF0000"></div>
+                                <span>[22]</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Bej</span>
+                                </div>
+                                <div class="color-dot" style="background: #F5F5DC"></div>
+                                <span>[108]</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Gri</span>
+                                </div>
+                                <div class="color-dot" style="background: #808080"></div>
+                                <span>[43]</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Pembe</span>
+                                </div>
+                                <div class="color-dot" style="background: #FFC0CB"></div>
+                                <span>[28]</span>
+                            </div>
+                            <div class="color-item">
+                                <div class="color-left">
+                                    <div class="color-checkbox"></div>
+                                    <span>Sarı</span>
+                                </div>
+                                <div class="color-dot" style="background: #FFFF00"></div>
+                                <span>[13]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-footer">
+                        <div class="filter-button clear-button">Hepsini temizle</div>
+                        <div class="filter-button apply-button">Uygula</div>
+                    </div>
+                </div>
+
+                <!-- Sıralama Filtresi -->
+                <div class="filter-overlay" id="sortOverlay">
+                    <div class="filter-header">
+                        <div class="filter-title">Sıralama</div>
+                        <div class="close-filter">×</div>
+                    </div>
+                    <div class="filter-content">
+                        <div class="sort-list">
+                            <div class="sort-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="sort-checkbox"></div>
+                                    <span>Önerilen Sıralama</span>
+                                </div>
+                            </div>
+                            <div class="sort-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="sort-checkbox"></div>
+                                    <span>Fiyat (Azalan)</span>
+                                </div>
+                            </div>
+                            <div class="sort-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="sort-checkbox"></div>
+                                    <span>Fiyat (Artan)</span>
+                                </div>
+                            </div>
+                            <div class="sort-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="sort-checkbox"></div>
+                                    <span>En Yeniler</span>
+                                </div>
+                            </div>
+                            <div class="sort-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="sort-checkbox"></div>
+                                    <span>En Çok Satanlar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-footer">
+                        <div class="filter-button clear-button">Hepsini temizle</div>
+                        <div class="filter-button apply-button">Uygula</div>
+                    </div>
+                </div>
+
+                <!-- Beden Filtresi -->
+                <div class="filter-overlay" id="sizeOverlay">
+                    <div class="filter-header">
+                        <div class="filter-title">Beden</div>
+                        <div class="close-filter">×</div>
+                    </div>
+                    <div class="filter-content">
+                        <div class="size-list">
+                            <div class="size-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="size-checkbox"></div>
+                                    <span>XS</span>
+                                </div>
+                                <span>[24]</span>
+                            </div>
+                            <div class="size-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="size-checkbox"></div>
+                                    <span>S</span>
+                                </div>
+                                <span>[36]</span>
+                            </div>
+                            <div class="size-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="size-checkbox"></div>
+                                    <span>M</span>
+                                </div>
+                                <span>[42]</span>
+                            </div>
+                            <div class="size-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="size-checkbox"></div>
+                                    <span>L</span>
+                                </div>
+                                <span>[38]</span>
+                            </div>
+                            <div class="size-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="size-checkbox"></div>
+                                    <span>XL</span>
+                                </div>
+                                <span>[28]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-footer">
+                        <div class="filter-button clear-button">Hepsini temizle</div>
+                        <div class="filter-button apply-button">Uygula</div>
+                    </div>
+                </div>
+
+                <!-- Fiyat Filtresi -->
+                <div class="filter-overlay" id="priceOverlay">
+                    <div class="filter-header">
+                        <div class="filter-title">Fiyat</div>
+                        <div class="close-filter">×</div>
+                    </div>
+                    <div class="filter-content">
+                        <div class="price-list">
+                            <div class="price-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="price-checkbox"></div>
+                                    <span>0 TL - 500 TL</span>
+                                </div>
+                                <span>[18]</span>
+                            </div>
+                            <div class="price-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="price-checkbox"></div>
+                                    <span>500 TL - 1000 TL</span>
+                                </div>
+                                <span>[45]</span>
+                            </div>
+                            <div class="price-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="price-checkbox"></div>
+                                    <span>1000 TL - 1500 TL</span>
+                                </div>
+                                <span>[62]</span>
+                            </div>
+                            <div class="price-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="price-checkbox"></div>
+                                    <span>1500 TL - 2000 TL</span>
+                                </div>
+                                <span>[34]</span>
+                            </div>
+                            <div class="price-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="price-checkbox"></div>
+                                    <span>2000 TL ve üzeri</span>
+                                </div>
+                                <span>[21]</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-footer">
+                        <div class="filter-button clear-button">Hepsini temizle</div>
+                        <div class="filter-button apply-button">Uygula</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-controls">
+                <div class="search-bar">ARA</div>
+                <div class="nav-bar">
+                    <div class="nav-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12l9-9 9 9"/>
+                            <path d="M5 10v10a2 2 0 0 1-2 2h10a2 2 0 0 1 2-2V10"/>
+                        </svg>
+                    </div>
+                    <div class="nav-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    </div>
+                    <div class="nav-item text-only active">MENÜ</div>
+                    <div class="nav-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6zm0 0l2-4h14l2 4"/>
+                            <path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                    </div>
+                    <div class="nav-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M20 21a8 8 0 1 0-16 0"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const appContent = document.getElementById('appContent');
+        const brandLogo = document.getElementById('brandLogo');
+        const heroImages = document.querySelectorAll('.hero-image');
+        let currentImageIndex = 0;
+        let direction = 1; // 1 ileri, -1 geri
+        let sliderInterval = null; // Slider interval'ini başta tanımla
+        
+        // Otomatik scroll fonksiyonu
+        function autoScroll() {
+            currentImageIndex += direction;
+            
+            // Son görsele geldiğinde yönü değiştir
+            if (currentImageIndex >= heroImages.length - 1) {
+                direction = -1;
+            }
+            // İlk görsele geldiğinde yönü değiştir
+            else if (currentImageIndex <= 0) {
+                direction = 1;
+            }
+            
+            const nextImage = heroImages[currentImageIndex];
+            const scrollPosition = nextImage.offsetTop;
+            
+            heroSection.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        // Slider'ı başlat
+        function startSlider() {
+            if (!sliderInterval) {
+                currentImageIndex = 0;
+                direction = 1;
+                sliderInterval = setInterval(autoScroll, 5000);
+            }
+        }
+
+        // Slider'ı durdur
+        function stopSlider() {
+            if (sliderInterval) {
+                clearInterval(sliderInterval);
+                sliderInterval = null;
+            }
+        }
+
+        // İlk başta slider'ı başlat
+        startSlider();
+
+        // Logo renk değişimi için scroll event listener
+        const heroSection = document.querySelector('.hero-section');
+        heroSection.addEventListener('scroll', () => {
+            const scrollPosition = heroSection.scrollTop;
+            const firstThreshold = 100;  // Beyazdan siyaha
+            const secondThreshold = 300; // Siyahtan sarıya
+            
+            if (scrollPosition > secondThreshold) {
+                brandLogo.style.filter = 'brightness(0) sepia(1) saturate(10) hue-rotate(40deg)'; // Sarı tonu
+                brandLogo.style.mixBlendMode = 'normal';
+            } else if (scrollPosition > firstThreshold) {
+                brandLogo.style.filter = 'brightness(0)'; // Siyah
+                brandLogo.style.mixBlendMode = 'normal';
+            } else {
+                brandLogo.style.filter = 'brightness(0) invert(1)'; // Beyaz
+                brandLogo.style.mixBlendMode = 'overlay';
+            }
+        });
+
+        // Menü işlemleri
+        const menuButton = document.querySelector('.nav-item.text-only');
+        const menuOverlay = document.querySelector('.menu-overlay');
+        const menuContainer = document.querySelector('.menu-container');
+        const closeMenu = document.querySelector('.close-menu');
+        const menuCategories = document.querySelectorAll('.menu-category');
+        const subcategories = document.querySelectorAll('.subcategories');
+
+        menuButton.addEventListener('click', () => {
+            menuOverlay.classList.add('active');
+            menuContainer.classList.add('active');
+            stopSlider(); // Slider'ı durdur
+            appContent.style.overflow = 'hidden';
+        });
+
+        closeMenu.addEventListener('click', () => {
+            menuOverlay.classList.remove('active');
+            menuContainer.classList.remove('active');
+            startSlider(); // Slider'ı başlat
+            appContent.style.overflow = 'auto';
+        });
+
+        menuOverlay.addEventListener('click', (e) => {
+            if (e.target === menuOverlay) {
+                menuOverlay.classList.remove('active');
+                menuContainer.classList.remove('active');
+                startSlider(); // Slider'ı başlat
+                appContent.style.overflow = 'auto';
+            }
+        });
+
+        menuCategories.forEach(category => {
+            category.addEventListener('click', () => {
+                // Aktif kategoriyi değiştir
+                menuCategories.forEach(c => c.classList.remove('active'));
+                category.classList.add('active');
+
+                // İlgili alt kategorileri göster
+                const categoryName = category.dataset.category;
+                subcategories.forEach(sub => {
+                    if (sub.dataset.category === categoryName) {
+                        sub.classList.add('active');
+                    } else {
+                        sub.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Arama işlemleri
+        const searchBar = document.querySelector('.search-bar');
+        const searchOverlay = document.querySelector('.search-overlay');
+
+        searchBar.addEventListener('click', () => {
+            searchOverlay.classList.add('active');
+            stopSlider();
+            appContent.style.overflow = 'hidden';
+        });
+
+        searchOverlay.addEventListener('click', (e) => {
+            if (e.target === searchOverlay) {
+                searchOverlay.classList.remove('active');
+                startSlider();
+                appContent.style.overflow = 'auto';
+            }
+        });
+
+        // Ürün listesi işlemleri
+        const newCollectionLink = document.querySelector('.subcategory');
+        const productList = document.querySelector('.product-list');
+        const backButton = document.querySelector('.back-button');
+
+        newCollectionLink.addEventListener('click', () => {
+            productList.classList.add('active');
+            menuOverlay.classList.remove('active');
+            menuContainer.classList.remove('active');
+            stopSlider();
+            appContent.style.overflow = 'hidden';
+            // Slider'ı tamamen durdur ve arka plan hareketlerini engelle
+            currentImageIndex = 0;
+            direction = 1;
+            appContent.scrollTo({
+                top: 0,
+                behavior: 'instant'
+            });
+        });
+
+        backButton.addEventListener('click', () => {
+            productList.classList.remove('active');
+            appContent.style.overflow = 'auto';
+            // Ana sayfaya dönüldüğünde slider'ı yeniden başlat
+            startSlider();
+        });
+
+        // Filtre işlemleri
+        const filterOptions = document.querySelectorAll('.filter-option');
+        const filterOverlays = {
+            'SIRALAMA': document.getElementById('sortOverlay'),
+            'RENK': document.querySelector('.filter-overlay'),
+            'BEDEN': document.getElementById('sizeOverlay'),
+            'FİYAT': document.getElementById('priceOverlay')
+        };
+        const closeButtons = document.querySelectorAll('.close-filter');
+
+        filterOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const filterType = option.textContent;
+                const overlay = filterOverlays[filterType];
+                if (overlay) {
+                    overlay.style.display = 'flex';
+                    requestAnimationFrame(() => {
+                        overlay.classList.add('active');
+                    });
+                }
+            });
+        });
+
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const overlay = button.closest('.filter-overlay');
+                if (overlay) {
+                    overlay.classList.remove('active');
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 300);
+                }
+            });
+        });
+
+        // Checkbox işlemleri
+        const checkboxes = document.querySelectorAll('.sort-checkbox, .size-checkbox, .price-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', () => {
+                checkbox.innerHTML = checkbox.innerHTML ? '' : '✓';
+            });
+        });
+
+        // Ana sayfa ikonuna tıklama
+        const homeIcon = document.querySelector('.nav-bar .nav-item:first-child');
+        homeIcon.addEventListener('click', () => {
+            // Tüm overlayleri kapat
+            menuOverlay.classList.remove('active');
+            menuContainer.classList.remove('active');
+            searchOverlay.classList.remove('active');
+            productList.classList.remove('active');
+            
+            // Ana sayfaya dön
+            appContent.style.overflow = 'auto';
+            appContent.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Slider'ı yeniden başlat
+            startSlider();
+        });
+
+        // Ürün detay sayfası işlemleri
+        const productCards = document.querySelectorAll('.product-card');
+        const productDetail = document.querySelector('.product-detail');
+        const detailBack = document.querySelector('.detail-back');
+        const detailFavorite = document.querySelector('.detail-favorite');
+        const detailColors = document.querySelectorAll('.detail-color');
+
+        productCards.forEach(card => {
+            card.addEventListener('click', () => {
+                productDetail.classList.add('active');
+                appContent.style.overflow = 'hidden';
+            });
+        });
+
+        detailBack.addEventListener('click', () => {
+            productDetail.classList.remove('active');
+            appContent.style.overflow = 'auto';
+        });
+
+        detailFavorite.addEventListener('click', () => {
+            const svg = detailFavorite.querySelector('svg');
+            if (svg.getAttribute('fill') === 'none') {
+                svg.setAttribute('fill', 'currentColor');
+            } else {
+                svg.setAttribute('fill', 'none');
+            }
+        });
+
+        detailColors.forEach(color => {
+            color.addEventListener('click', () => {
+                detailColors.forEach(c => c.classList.remove('active'));
+                color.classList.add('active');
+            });
+        });
+
+        // Ürün detay görsel scroll işlemleri
+        const detailImageContainer = document.querySelector('.detail-image-container');
+        const detailImages = document.querySelectorAll('.detail-image');
+        const imageDots = document.querySelectorAll('.image-dot');
+
+        detailImageContainer.addEventListener('scroll', () => {
+            const scrollPosition = detailImageContainer.scrollTop;
+            const imageHeight = detailImages[0].offsetHeight;
+            
+            const activeIndex = Math.round(scrollPosition / imageHeight);
+            
+            imageDots.forEach((dot, index) => {
+                if (index === activeIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        });
+
+        imageDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                detailImageContainer.scrollTo({
+                    top: index * detailImages[0].offsetHeight,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

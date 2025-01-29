@@ -1,0 +1,12 @@
+{
+  "name": "ltb-app-tasarim",
+  "version": "1.0.0",
+  "description": "LTB App Tasarım",
+  "scripts": {
+    "start": "serve",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+} 
