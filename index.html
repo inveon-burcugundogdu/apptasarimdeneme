@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>E-Ticaret App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -570,6 +571,45 @@
             padding: 8px;
             color: #fff;
             background: #000;
+        }
+
+        .favorite-icon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-icon i {
+            transition: all 0.3s ease;
+        }
+
+        .favorite-icon.active {
+            background: rgba(255, 59, 48, 0.2);
+        }
+
+        .favorite-icon.active i {
+            color: #ff3b30;
+        }
+
+        .favorite-icon:hover {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .favorite-icon.active:hover {
+            background: rgba(255, 59, 48, 0.3);
         }
 
         .product-name {
@@ -1431,6 +1471,77 @@
         input[type="tel"] {
             font-family: inherit;
         }
+
+        /* Hesabım Paneli */
+        .account-panel {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 2700;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            transform: translateX(0);
+        }
+
+        .account-panel.active {
+            transform: translateX(-100%);
+        }
+
+        .account-header {
+            padding: 50px 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .account-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .close-account {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .account-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .account-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .account-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .account-menu-item i {
+            margin-right: 15px;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .account-menu-item:hover {
+            color: #000;
+            background: rgba(0, 0, 0, 0.02);
+        }
     </style>
 </head>
 <body>
@@ -1767,6 +1878,9 @@
                     <div class="products-grid">
                         <!-- İlk ürün çifti -->
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1780,6 +1894,9 @@
                             </div>
                         </div>
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1794,6 +1911,9 @@
                         </div>
                         <!-- İkinci ürün çifti -->
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1807,6 +1927,9 @@
                             </div>
                         </div>
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1821,6 +1944,9 @@
                         </div>
                         <!-- Üçüncü ürün çifti -->
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1834,6 +1960,9 @@
                             </div>
                         </div>
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1848,6 +1977,9 @@
                         </div>
                         <!-- Dördüncü ürün çifti -->
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1861,6 +1993,9 @@
                             </div>
                         </div>
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1875,6 +2010,9 @@
                         </div>
                         <!-- Beşinci ürün çifti -->
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -1888,6 +2026,9 @@
                             </div>
                         </div>
                         <div class="product-card">
+                            <div class="favorite-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
                             <img src="https://ltbjeans-hybris-p1.mncdn.com/mnresize/790/1059/media/products/01009518121600355739_1.jpg" alt="Ürün" class="product-image">
                             <div class="product-colors">
                                 <div class="color-option" style="background: #FFFFFF">+3</div>
@@ -2115,6 +2256,50 @@
                         <div class="filter-button apply-button">Uygula</div>
                     </div>
                 </div>
+
+                <!-- Hesabım Paneli -->
+                <div class="account-panel">
+                    <div class="account-header">
+                        <div class="account-title">Hesabım</div>
+                        <div class="close-account">×</div>
+                    </div>
+                    <div class="account-content">
+                        <div class="account-menu">
+                            <div class="account-menu-item">
+                                <i class="fas fa-user"></i>
+                                Profilim
+                            </div>
+                            <div class="account-menu-item">
+                                <i class="fas fa-heart"></i>
+                                Favorilerim
+                            </div>
+                            <div class="account-menu-item">
+                                <i class="fas fa-box"></i>
+                                Siparişlerim
+                            </div>
+                            <div class="account-menu-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Adreslerim
+                            </div>
+                            <div class="account-menu-item">
+                                <i class="fas fa-credit-card"></i>
+                                Kayıtlı Kartlarım
+                            </div>
+                            <div class="account-menu-item">
+                                <i class="fas fa-bell"></i>
+                                Bildirim Tercihlerim
+                            </div>
+                            <div class="account-menu-item">
+                                <i class="fas fa-cog"></i>
+                                Ayarlar
+                            </div>
+                            <div class="account-menu-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Çıkış Yap
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="bottom-controls">
@@ -2149,7 +2334,7 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             const splashScreen = document.querySelector('.splash-screen');
             const loginPage = document.querySelector('.login-page');
             const loginForm = document.querySelector('.login-form');
@@ -2735,6 +2920,39 @@
                             }, 300);
                         }
                     }
+                }
+            });
+
+            // Favori ikonlarına tıklama işlevselliği
+            const favoriteIcons = document.querySelectorAll('.favorite-icon');
+            favoriteIcons.forEach(icon => {
+                icon.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                });
+            });
+
+            // Hesap paneli işlevselliği
+            const accountIcon = document.querySelector('.nav-bar .nav-item:last-child');
+            const accountPanel = document.querySelector('.account-panel');
+            const closeAccount = document.querySelector('.close-account');
+
+            accountIcon.addEventListener('click', () => {
+                accountPanel.classList.add('active');
+                appContent.style.overflow = 'hidden';
+            });
+
+            closeAccount.addEventListener('click', () => {
+                accountPanel.classList.remove('active');
+                appContent.style.overflow = 'auto';
+            });
+
+            // Hesap paneline tıklandığında
+            accountPanel.addEventListener('click', (e) => {
+                // Eğer tıklanan element account-content veya onun alt elementi değilse kapat
+                if (!e.target.closest('.account-content') && !e.target.closest('.account-header')) {
+                    accountPanel.classList.remove('active');
+                    appContent.style.overflow = 'auto';
                 }
             });
         });

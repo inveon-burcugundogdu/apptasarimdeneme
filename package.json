@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "LTB App Tasarım",
   "scripts": {
-    "start": "serve",
+    "start": "serve -p 8000",
     "build": "echo 'No build step required'"
   },
   "dependencies": {
